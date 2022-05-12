@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <div id="show">
+
+    </div>
+    <div>
+        <p>1 chức năng tìm từ mới</p>
+        <p>1 chức năng random từ mới, có nút để hiển thị nghĩa của từ</p>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/7.2.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.2.1/firebase-firestore.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', event => {
+            const firebaseConfig = {
+                apiKey: "AIzaSyAQfzjbv1Lp17PcqCoVuheMFhHkkSpeh9U",
+                authDomain: "remember-words-123c3.firebaseapp.com",
+                projectId: "remember-words-123c3",
+                storageBucket: "remember-words-123c3.appspot.com",
+                messagingSenderId: "638632051391",
+                appId: "1:638632051391:web:3184087e2c1a50021b7c0a",
+                measurementId: "G-5S7CVTJT2Y"
+            };
+            firebase.initializeApp(firebaseConfig)
+
+            const db = firebase.firestore()
+            const words = db.collection('words');
+
+            let lstData = [];
+            words.get()
+            .then((snapshot) => {
+                const data = snapshot.docs.map((doc) => ({
+                id: doc.id,
+                ...doc.data(),
+                }));
+                lstData = data;
+                console.log(lstData);
+                if (lstData.length > 0) {
+                    let genHtml = "";
+                    lstData.map(word => {
+                        genHtml += `<h1>${word.name}: ${word.mean}</h1>`
+                    })
+                    document.getElementById('show').innerHTML = genHtml;
+                    
+                }
+            });
+         
+            
+        })
+    </script>
+</body>
+
+</html>
